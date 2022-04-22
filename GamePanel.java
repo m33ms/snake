@@ -155,7 +155,33 @@ public class GamePanel extends JPanel implements ActionListener {
     public class MyKeyAdapter extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
-
+            switch(e.getKeyCode()) {
+                //left arrow key
+                case KeyEvent.VK_LEFT:
+                    //limit turn to be 90 degrees
+                    if(direction != 'R') {
+                        direction = 'L';
+                    }
+                    break;
+                case KeyEvent.VK_RIGHT:
+                    //limit turn to be 90 degrees
+                    if(direction != 'L') {
+                        direction = 'R';
+                    }
+                    break;
+                case KeyEvent.VK_UP:
+                    //limit turn to be 90 degrees
+                    if(direction != 'D') {
+                        direction = 'U';
+                    }
+                    break;
+                case KeyEvent.VK_DOWN:
+                    //limit turn to be 90 degrees
+                    if(direction != 'U') {
+                        direction = 'D';
+                    }
+                    break;
+            }
         }
 
     }

@@ -72,6 +72,8 @@ public class GamePanel extends JPanel implements ActionListener {
                     g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
                 }
             }
+
+
         } else {
             gameOver(g);
         }
@@ -149,11 +151,12 @@ public class GamePanel extends JPanel implements ActionListener {
         }
     }
 
+
     public void gameOver(Graphics g) {
-        Font font = null;
+        Font gameover = null;
         try {
-            //register custom font
-            font = Font.createFont(Font.TRUETYPE_FONT, new File("arcadeclassic.ttf")).deriveFont(60f);
+            //register custom gameover
+            gameover = Font.createFont(Font.TRUETYPE_FONT, new File("arcadeclassic.ttf")).deriveFont(60f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("arcadeclassic.ttf")));
         } catch (FontFormatException e) {
@@ -161,18 +164,21 @@ public class GamePanel extends JPanel implements ActionListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Font bold = font.deriveFont(Font.BOLD, 12);
-        Font plain = font.deriveFont(Font.PLAIN, 12);
+
+        Font bold = gameover.deriveFont(Font.BOLD, 12);
+        Font plain = gameover.deriveFont(Font.PLAIN, 12);
 
 
         //game over text
         g.setColor(Color.red);
-        g.setFont(font);
+        g.setFont(gameover);
 
         //line up text over screen using FontMetrics
          FontMetrics metrics = getFontMetrics(g.getFont());
          g.drawString("Game  Over", (SCREEN_WIDTH-metrics.stringWidth("Game Over"))/2, SCREEN_HEIGHT/2);
+         g.drawString("     score  " + applesEaten, (SCREEN_WIDTH-metrics.stringWidth("     score: " + applesEaten))/2, SCREEN_HEIGHT/2 + 50);
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {

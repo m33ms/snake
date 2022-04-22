@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener {
@@ -48,25 +50,30 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void draw(Graphics g) {
-        //drawing grid for board
-        for(int i=0; i<SCREEN_HEIGHT; i++) {
-            g.drawLine(i*UNIT_SIZE, 0, i*UNIT_SIZE, SCREEN_HEIGHT);
-            g.drawLine(0, i*UNIT_SIZE, SCREEN_WIDTH, i*UNIT_SIZE);
-            g.setColor(Color.gray);
-        }
-        g.setColor(Color.red);
-        g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
-
-        //drawing body of snake
-        for(int i=0; i<bodyParts; i++) {
-            //head
-            if (i==0) {
-                g.setColor(Color.green);
-                g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
-            } else {
-                g.setColor(new Color(45,180,0));
-                g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+        if(running) {
+            //drawing grid for board
+            for (int i = 0; i < SCREEN_HEIGHT; i++) {
+                g.drawLine(i * UNIT_SIZE, 0, i * UNIT_SIZE, SCREEN_HEIGHT);
+                g.drawLine(0, i * UNIT_SIZE, SCREEN_WIDTH, i * UNIT_SIZE);
+                g.setColor(Color.gray);
             }
+            g.setColor(Color.red);
+            g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
+
+            //drawing body of snake
+            for (int i = 0; i < bodyParts; i++) {
+                //draw head
+                if(i == 0) {
+                    g.setColor(Color.green);
+                    g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+                } else {
+                    //draw body
+                    g.setColor(new Color(45, 180, 0));
+                    g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
+                }
+            }
+        } else {
+            gameOver(g);
         }
     }
 
@@ -143,7 +150,28 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void gameOver(Graphics g) {
+        Font font = null;
+        try {
+            //register custom font
+            font = Font.createFont(Font.TRUETYPE_FONT, new File("arcadeclassic.ttf")).deriveFont(60f);
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("arcadeclassic.ttf")));
+        } catch (FontFormatException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Font bold = font.deriveFont(Font.BOLD, 12);
+        Font plain = font.deriveFont(Font.PLAIN, 12);
 
+
+        //game over text
+        g.setColor(Color.red);
+        g.setFont(font);
+
+        //line up text over screen using FontMetrics
+         FontMetrics metrics = getFontMetrics(g.getFont());
+         g.drawString("Game  Over", (SCREEN_WIDTH-metrics.stringWidth("Game Over"))/2, SCREEN_HEIGHT/2);
     }
 
     @Override
